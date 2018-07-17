@@ -1,10 +1,11 @@
-import React from 'react'
+ import React from 'react'
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom'
 // import { createStore, applyMiddleware, compose} from 'redux'
-import { createStore } from './myRedux'
-import thunk from 'redux-thunk'
-import { counter } from './index.redux'
+import { createStore, applyMiddleware } from './myRedux'
+// import thunk from 'redux-thunk'
+import thunk from './redux-thunk'
+import { counter,  } from './index.redux'
 // import { Provider } from 'react-redux';
 import { Provider } from './myReactRedux';
 import App from './App'
@@ -14,7 +15,10 @@ import App from './App'
 //   applyMiddleware(thunk),
 //   window.devToolsExtension ? window.devToolsExtension() : f => f
 // ))
-const store = createStore(counter);
+const store = createStore(counter, 
+  applyMiddleware(thunk),
+)
+// const store = createStore(counter);
 ReactDOM.render(
   (
     <Provider store={store}>

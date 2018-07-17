@@ -7,7 +7,7 @@ export function counter(state=0, action) {
   // let state = state||0
   switch (action.type) {
     case ADD_GUN:
-      return state + action.guns
+      return state + 1
     case REMOVE_GUN:
       return state - 1
     default:
