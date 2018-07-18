@@ -1,4 +1,3 @@
-
 export function createStore(reducer, enhancer){
     if(enhancer){
         return enhancer(createStore)(reducer)
@@ -37,7 +36,7 @@ export function bindActionCreators(mapDispatchToProps, dispatch){
 }
 
 
-export function applyMiddleware(middleware){
+export function applyMiddleware(...middlewares){
     return (createStore) => (...args) => {
         const store = createStore(...args);
         let dispatch = store.dispatch;
@@ -45,10 +44,23 @@ export function applyMiddleware(middleware){
             getState:store.getState,
             dispatch:(...args) => dispatch(...args)
         }
-        dispatch = middleware(midApi)(store.dispatch);
+
+        const middlewareChain = middlewares.map(middleware => middleware(midApi));
+        dispatch = compose(...middlewareChain)(store.dispatch);
+        //dispatch = middleware(midApi)(store.dispatch);
         return {
             ...store,
             dispatch
         }
     }
+}
+
+export function compose(...funcs){
+    if(funcs.length === 0 ){
+        return arg => arg ;
+    }
+    if(funcs === 1){
+        return funcs[0]
+    }
+    return funcs.reduce((ret,item) => (...args) => ret(item(...args)))
 }
